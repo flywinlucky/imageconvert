@@ -6,126 +6,200 @@
 <title>Convertor Imagini — HEIC, PNG, JPG, WebP, AVIF în browser</title>
 <meta name="description" content="Convertește HEIC în JPG, PNG în JPG, imagini în WebP sau AVIF — gratuit, direct în browser. Fără upload, fără cont. Privat și rapid.">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
   :root{
-    --bg:#140F1C;            /* negru cald, ton violet */
-    --panel:rgba(228,210,247,.80);   /* violet pal +20% saturat, transparent */
-    --panel-2:rgba(240,229,252,.62); /* violet f. deschis pt input/drop */
-    --ink:#1D1526;           /* text inchis in casute */
-    --soft:#6A5C7C;          /* text secundar in casute */
-    --light:#F0E9F8;         /* text deschis pe negru */
-    --soft-light:#A99EB8;    /* text secundar pe negru */
-    --line:rgba(150,110,200,.28);
-    --mag:#C81E96; --vio:#7C3AED; --accent:#C81E96; --accent-soft:#F6E6F4;
-    --grad:linear-gradient(135deg,#C81E96 0%,#9D2BC8 55%,#7C3AED 100%);
-    --good:#0FA968; --warn:#D97A12;
-    --r:16px; --mono:'JetBrains Mono',monospace; --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+    --bg:#E8E9EE;
+    --dot:rgba(120,122,140,.16);
+    --glass:rgba(255,255,255,.28);
+    --glass-soft:rgba(255,255,255,.5);
+    --ink:#23242D;
+    --soft:#6B6E7B;
+    --rim:rgba(255,255,255,.7);
+    --sh-dark:rgba(168,170,190,.55);
+    --sh-light:rgba(255,255,255,.95);
+    --r:28px; --mono:'JetBrains Mono',monospace; --sans:'Plus Jakarta Sans',system-ui,sans-serif;
   }
+  /* ===== DARK MODE — acelasi design, varianta intunecata ===== */
+  body.dark{
+    --bg:#23252C;
+    --dot:rgba(255,255,255,.05);
+    --glass:rgba(255,255,255,.045);
+    --glass-soft:rgba(255,255,255,.07);
+    --ink:#E9EAF0;
+    --soft:#9A9DAB;
+    --rim:rgba(255,255,255,.10);
+    --sh-dark:rgba(0,0,0,.6);
+    --sh-light:rgba(255,255,255,.05);
+  }
+  body.dark .blob{background:radial-gradient(circle at 34% 30%, #3a3d47, #2a2c34 72%, #202229);
+    box-shadow:24px 24px 60px rgba(0,0,0,.6), -18px -18px 46px rgba(255,255,255,.04)}
+  body.dark .logo{background:linear-gradient(145deg,#3a3d47,#26282f)}
+  body.dark .logo::before{background:linear-gradient(145deg,#e9eaf0,#c7c9d4)}
+  body.dark .tool,body.dark .faq,body.dark .ad{
+    box-shadow:14px 14px 34px rgba(0,0,0,.55), -10px -10px 26px rgba(255,255,255,.04),
+      inset 2px 2px 4px rgba(255,255,255,.05), inset -3px -3px 8px rgba(0,0,0,.35)}
+  body.dark .drop .ic{background:linear-gradient(145deg,#3a3d47,#26282f)}
+  body.dark select,body.dark input[type=number]{background:rgba(255,255,255,.04);
+    box-shadow:inset 2px 2px 5px rgba(0,0,0,.5), inset -2px -2px 5px rgba(255,255,255,.04)}
+  body.dark .btn{background:linear-gradient(145deg,#41444e,#2c2e36);color:#fff;
+    box-shadow:6px 6px 14px rgba(0,0,0,.6), -4px -4px 10px rgba(255,255,255,.04)}
+  body.dark .btn.sec{background:linear-gradient(145deg,#3a3d47,#26282f);color:var(--soft)}
+  body.dark .go{background:linear-gradient(145deg,#4c4f59,#34363e);
+    box-shadow:4px 4px 10px rgba(0,0,0,.55), -3px -3px 8px rgba(255,255,255,.04)}
+  body.dark .item.wait .go{background:linear-gradient(145deg,#3a3d47,#26282f);color:var(--soft)}
+  body.dark .item img{background:#2a2c34;box-shadow:3px 3px 8px rgba(0,0,0,.55), -2px -2px 6px rgba(255,255,255,.04)}
+  body.dark .item{border-top-color:rgba(255,255,255,.08)}
+  body.dark details{border-top-color:rgba(255,255,255,.08)}
+  body.dark summary::after{color:var(--ink)}
+  body.dark details p{color:#B9BCC8}
+  body.dark .drop:hover{background:rgba(255,255,255,.04)}
+  body.dark .drop.over{background:rgba(255,255,255,.08)}
+  body.dark input[type=range]{accent-color:#cfd2dc}
+  body.dark .hint{color:#e8c98a;background:rgba(70,55,20,.45);border-color:rgba(170,130,60,.45)}
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    background:
-      radial-gradient(120% 60% at 50% -10%, rgba(200,30,150,.22) 0%, rgba(20,15,28,0) 55%),
-      radial-gradient(120% 60% at 100% 5%, rgba(124,58,237,.20) 0%, rgba(20,15,28,0) 50%),
-      var(--bg);
-    background-attachment:fixed;min-height:100vh;
-    color:var(--light);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased
-  }
-  .wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px}
+    background-color:var(--bg);
+    background-image:radial-gradient(var(--dot) 1px, transparent 1.4px);
+    background-size:22px 22px;background-position:-11px -11px;
+    background-attachment:fixed;min-height:100vh;color:var(--ink);
+    font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
 
-  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.02em;color:var(--light)}
-  .logo{width:30px;height:30px;border-radius:8px;background:var(--grad);position:relative;flex:none}
-  .logo::before{content:"";position:absolute;inset:7px;border-radius:4px;background:rgba(20,15,28,.9)}
-  .priv{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
-    color:var(--mag);background:var(--panel);padding:5px 9px;border-radius:999px;white-space:nowrap}
-  .priv b{width:6px;height:6px;border-radius:50%;background:var(--good)}
+  /* bile albe 3D decor */
+  .bg{position:fixed;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;
+    background:radial-gradient(circle at 34% 30%, #ffffff, #d9dae2 72%, #ccced8);
+    box-shadow:24px 24px 60px rgba(168,170,190,.55), -18px -18px 46px rgba(255,255,255,.9)}
+  .b1{width:200px;height:200px;top:-60px;left:-50px}
+  .b2{width:140px;height:140px;bottom:60px;right:-40px}
+  .b3{width:90px;height:90px;bottom:-30px;left:40px;opacity:.85}
 
-  h1{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:4px;
-    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:var(--soft-light);font-size:14px;margin-bottom:14px}
+  .wrap{max-width:560px;margin:0 auto;padding:22px 16px 60px}
 
-  .tool{background:var(--panel);color:var(--ink);border:1px solid rgba(255,255,255,.18);
-    border-radius:var(--r);padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.35);
-    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px}
+  .hright{display:flex;align-items:center;gap:10px}
+  .tbtn{width:40px;height:40px;flex:none;border:1px solid var(--rim);border-radius:50%;cursor:pointer;
+    background:var(--glass-soft);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;transition:transform .1s,box-shadow .2s;
+    box-shadow:3px 3px 8px var(--sh-dark), -2px -2px 6px var(--sh-light)}
+  .tbtn:active{transform:translateY(1px);box-shadow:2px 2px 5px var(--sh-dark), -1px -1px 4px var(--sh-light)}
+  .tbtn svg{width:18px;height:18px}
+  .tbtn .sun{display:none}.tbtn .moon{display:block}
+  body.dark .tbtn .sun{display:block}body.dark .tbtn .moon{display:none}
+  @media(max-width:400px){.priv{font-size:10.5px;padding:5px 9px}}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;letter-spacing:-.02em;color:var(--ink)}
+  .logo{width:32px;height:32px;border-radius:10px;
+    background:linear-gradient(145deg,#ffffff,#d9dae2);position:relative;flex:none;
+    box-shadow:4px 4px 10px var(--sh-dark), -3px -3px 8px var(--sh-light)}
+  .logo::before{content:"";position:absolute;inset:9px;border-radius:5px;
+    background:linear-gradient(145deg,#2b2c34,#16171d)}
+  .priv{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;color:var(--soft);
+    background:var(--glass-soft);padding:7px 12px;border-radius:999px;white-space:nowrap;
+    border:1px solid var(--rim);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:3px 3px 8px var(--sh-dark), -2px -2px 6px var(--sh-light)}
+  .priv b{width:7px;height:7px;border-radius:50%;background:#2bbd7e;box-shadow:0 0 7px rgba(43,189,126,.6)}
 
-  .drop{border:2px dashed var(--line);border-radius:12px;padding:30px 16px;text-align:center;
-    cursor:pointer;transition:.15s;background:var(--panel-2);display:block;color:var(--ink)}
-  .drop.over{border-color:var(--mag);background:var(--accent-soft)}
-  .drop .ic{width:40px;height:40px;margin:0 auto 8px;border-radius:11px;background:rgba(255,255,255,.7);
-    display:flex;align-items:center;justify-content:center}
-  .drop .ic svg{width:20px;height:20px;stroke:var(--mag)}
+  h1{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:5px;color:var(--ink)}
+  .sub{color:var(--soft);font-size:14px;margin-bottom:18px}
+
+  /* CARD GLASS 3D — rama groasa rotunjita */
+  .tool{position:relative;background:var(--glass);border:1px solid var(--rim);border-radius:var(--r);
+    padding:18px;backdrop-filter:blur(22px) saturate(120%);-webkit-backdrop-filter:blur(22px) saturate(120%);
+    box-shadow:
+      14px 14px 34px var(--sh-dark),
+      -12px -12px 28px var(--sh-light),
+      inset 2px 2px 4px rgba(255,255,255,.65),
+      inset -3px -3px 8px rgba(168,170,190,.28)}
+
+  .drop{border:none;border-radius:18px;padding:28px 16px 24px;text-align:center;
+    cursor:pointer;transition:background .15s;background:transparent;display:block;color:var(--ink)}
+  .drop:hover{background:rgba(255,255,255,.18)}
+  .drop.over{background:rgba(255,255,255,.34)}
+  .drop .ic{width:46px;height:46px;margin:0 auto 10px;border-radius:14px;
+    background:linear-gradient(145deg,#ffffff,#dcdde5);display:flex;align-items:center;justify-content:center;
+    box-shadow:5px 5px 12px var(--sh-dark), -4px -4px 10px var(--sh-light)}
+  .drop .ic svg{width:20px;height:20px;stroke:var(--ink)}
   .drop b{display:block;font-weight:700;font-size:15px;color:var(--ink)}
   .drop span{font-size:12.5px;color:var(--soft)}
   .drop input{display:none}
 
-  .ctrl{display:none;margin-top:14px;gap:12px;flex-direction:column}
+  .ctrl{display:none;margin-top:16px;gap:12px;flex-direction:column}
   .ctrl.on{display:flex}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .f label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.04em;color:var(--soft);margin-bottom:5px}
-  select,input[type=number]{width:100%;font-family:var(--mono);font-size:14px;padding:11px 12px;
-    border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.62);color:var(--ink);-webkit-appearance:none}
-  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236F6480' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    letter-spacing:.04em;color:var(--soft);margin-bottom:6px}
+  select,input[type=number]{width:100%;font-family:var(--mono);font-size:14px;padding:12px;
+    border:1px solid var(--rim);border-radius:12px;background:rgba(255,255,255,.42);color:var(--ink);
+    -webkit-appearance:none;box-shadow:inset 2px 2px 5px rgba(168,170,190,.4), inset -2px -2px 5px rgba(255,255,255,.85)}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6E7B' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 12px center}
   .qrow{display:flex;align-items:center;gap:10px}
-  input[type=range]{flex:1;accent-color:var(--mag)}
+  input[type=range]{flex:1;accent-color:#2b2c34}
   .qv{font-family:var(--mono);font-size:13px;min-width:40px;text-align:right;color:var(--ink)}
   .f.off{opacity:.4;pointer-events:none}
 
   .acts{display:flex;gap:10px}
   .btn{flex:1;font-family:var(--sans);font-weight:700;font-size:15px;border:none;cursor:pointer;
-    background:var(--grad);background-size:160% 160%;background-position:0% 50%;color:#fff;
-    padding:13px;border-radius:11px;transition:background-position .5s ease,transform .1s;
-    box-shadow:0 6px 18px rgba(200,30,150,.3)}
-  .btn:hover{background-position:100% 50%}
-  .btn:active{transform:translateY(1px)}
-  .btn[disabled]{opacity:.5}
-  .btn.sec{flex:none;width:48px;background:#fff;border:1px solid var(--line);color:var(--soft);font-size:18px;box-shadow:none}
+    background:linear-gradient(145deg,#34353f,#1c1d24);color:#fff;padding:14px;border-radius:14px;
+    transition:transform .1s,box-shadow .2s;
+    box-shadow:6px 6px 14px var(--sh-dark), -4px -4px 10px var(--sh-light)}
+  .btn:active{transform:translateY(1px);box-shadow:3px 3px 8px var(--sh-dark), -2px -2px 6px var(--sh-light)}
+  .btn[disabled]{opacity:.55}
+  .btn.sec{flex:none;width:50px;background:linear-gradient(145deg,#ffffff,#dcdde5);color:var(--soft);font-size:18px}
 
-  .res{margin-top:4px}
-  .item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-top:1px solid var(--line)}
-  .item img{width:46px;height:46px;border-radius:9px;object-fit:cover;border:1px solid var(--line);flex:none;background:#fff}
+  .res{margin-top:6px}
+  .item{display:flex;align-items:center;gap:11px;padding:12px 4px;border-top:1px solid rgba(255,255,255,.5)}
+  .item img{width:48px;height:48px;border-radius:12px;object-fit:cover;flex:none;background:#fff;
+    box-shadow:3px 3px 8px var(--sh-dark), -2px -2px 6px var(--sh-light)}
   .info{flex:1;min-width:0}
   .nm{font-weight:600;font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .st{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-top:2px}
-  .st .down{color:var(--good);font-weight:600}
-  .st .up{color:var(--warn);font-weight:600}
-  .go{font-weight:700;font-size:12.5px;text-decoration:none;color:#fff;background:var(--grad);
-    padding:9px 13px;border-radius:9px;white-space:nowrap}
-  .item.wait .go{background:var(--accent-soft);color:var(--mag);pointer-events:none}
+  .st .down{color:#1f9d63;font-weight:600}
+  .st .up{color:#c2741a;font-weight:600}
+  .go{font-weight:700;font-size:12.5px;text-decoration:none;color:#fff;
+    background:linear-gradient(145deg,#34353f,#1c1d24);padding:10px 14px;border-radius:11px;white-space:nowrap;
+    box-shadow:4px 4px 10px var(--sh-dark), -3px -3px 8px var(--sh-light)}
+  .item.wait .go{background:linear-gradient(145deg,#ffffff,#dcdde5);color:var(--soft);pointer-events:none}
 
-  .loading{font-family:var(--mono);font-size:12px;color:var(--mag);padding:8px 4px;display:none}
+  .loading{font-family:var(--mono);font-size:12px;color:var(--ink);padding:8px 4px;display:none}
   .loading.on{display:block}
 
-  .hint{margin-top:10px;font-size:12px;color:#92400E;background:#FFF6E6;border:1px solid #F4D58A;
-    border-radius:9px;padding:9px 11px;display:none}
+  .hint{margin-top:10px;font-size:12px;color:#8a5a12;background:rgba(255,245,225,.6);border:1px solid rgba(220,180,110,.5);
+    border-radius:11px;padding:10px 12px;display:none}
   .hint.on{display:block}
 
-  .ad{margin:22px 0;min-height:90px;border:1px solid rgba(255,255,255,.18);border-radius:12px;
-    display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);
-    font-size:11.5px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:26px 0 8px;color:var(--light)}
-  .faq{background:var(--panel);color:var(--ink);border:1px solid rgba(255,255,255,.18);
-    border-radius:12px;overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-  details{padding:13px 14px;border-top:1px solid var(--line)}
+  .ad{margin:24px 0;min-height:90px;border:1px solid var(--rim);border-radius:20px;
+    display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:11.5px;
+    background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    box-shadow:10px 10px 26px var(--sh-dark), -8px -8px 20px var(--sh-light), inset 2px 2px 4px rgba(255,255,255,.6)}
+  h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:28px 0 10px;color:var(--ink)}
+  .faq{position:relative;color:var(--ink);border:1px solid var(--rim);border-radius:22px;overflow:hidden;
+    background:var(--glass);backdrop-filter:blur(20px) saturate(120%);-webkit-backdrop-filter:blur(20px) saturate(120%);
+    box-shadow:12px 12px 30px var(--sh-dark), -10px -10px 24px var(--sh-light), inset 2px 2px 4px rgba(255,255,255,.6)}
+  details{padding:14px 16px;border-top:1px solid rgba(255,255,255,.5)}
   details:first-child{border-top:none}
   summary{font-weight:700;font-size:14px;color:var(--ink);cursor:pointer;list-style:none;
     display:flex;justify-content:space-between;gap:12px}
   summary::-webkit-details-marker{display:none}
-  summary::after{content:"+";color:var(--mag);font-weight:700}
+  summary::after{content:"+";color:var(--ink);font-weight:700}
   details[open] summary::after{content:"–"}
-  details p{font-size:13.5px;color:#473C55;margin-top:8px}
-  footer{margin-top:30px;text-align:center;color:var(--soft-light);font-size:12px}
-  footer a{color:var(--soft-light)}
+  details p{font-size:13.5px;color:#4a4c57;margin-top:8px}
+  footer{margin-top:30px;text-align:center;color:var(--soft);font-size:12px}
+  footer a{color:var(--soft)}
 </style>
 </head>
 <body>
+<div class="bg"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
 <div class="wrap">
 
   <div class="top">
     <div class="brand"><span class="logo"></span>PixelSwap</div>
-    <span class="priv"><b></b>Procesat local pe device</span>
+    <div class="hright">
+      <span class="priv"><b></b>Procesat local pe device</span>
+      <button class="tbtn" id="theme" aria-label="Comută tema deschis/întunecat">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
   </div>
 
   <h1>Convertește imagini în browser</h1>
@@ -194,9 +268,27 @@ const drop=$('#drop'),file=$('#file'),ctrl=$('#ctrl'),res=$('#res'),fmt=$('#fmt'
       hint=$('#hint'),loading=$('#loading');
 let items=[];
 
+// dark mode (in-memory; porneste dupa preferinta sistemului)
+const themeBtn=$('#theme');
+if(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) document.body.classList.add('dark');
+themeBtn.addEventListener('click',()=>document.body.classList.toggle('dark'));
+
 const bytes=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(2)+' MB';
 const ext=m=>({'image/jpeg':'jpg','image/webp':'webp','image/avif':'avif','image/png':'png'}[m]||'png');
 const isHeic=f=>/\.(heic|heif)$/i.test(f.name)||f.type==='image/heic'||f.type==='image/heif';
+
+let heicPromise=null;
+function loadHeic(){
+  if(window.heic2any) return Promise.resolve();
+  if(heicPromise) return heicPromise;
+  heicPromise=new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js';
+    s.onload=()=>res(); s.onerror=()=>rej(new Error('HEIC load failed'));
+    document.head.appendChild(s);
+  });
+  return heicPromise;
+}
 
 ['dragenter','dragover'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.add('over')}));
 ['dragleave','drop'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.remove('over')}));
@@ -217,8 +309,9 @@ async function add(list){
     if(!f.type.startsWith('image/') && !heic) continue;
     let srcBlob=f;
     if(heic){
-      if(typeof heic2any!=='function'){ alert('Suportul HEIC nu s-a încărcat (verifică internetul).'); continue; }
       loading.classList.add('on');
+      try{ await loadHeic(); }
+      catch(e){ loading.classList.remove('on'); alert('Suportul HEIC nu s-a putut încărca (verifică internetul).'); continue; }
       try{
         const out=await heic2any({blob:f,toType:'image/png'});
         srcBlob=Array.isArray(out)?out[0]:out;
