@@ -3,43 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convertor Imagini — PNG, JPG, WebP în browser</title>
-<meta name="description" content="Convertește și comprimă imagini PNG, JPG, WebP gratuit, direct în browser. Fără upload, fără cont. Privat și rapid.">
+<title>Convertor Imagini — HEIC, PNG, JPG, WebP, AVIF în browser</title>
+<meta name="description" content="Convertește HEIC în JPG, PNG în JPG, imagini în WebP sau AVIF — gratuit, direct în browser. Fără upload, fără cont. Privat și rapid.">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
   :root{
-    --bg:#F6F7FB; --card:#FFFFFF; --ink:#14161D; --soft:#6B7280;
-    --line:#E6E8EF; --accent:#5B5BD6; --accent-soft:#EEEEFB;
-    --good:#10B981; --warn:#F59E0B;
+    --bg:#140F1C;            /* negru cald, ton violet */
+    --panel:rgba(228,210,247,.80);   /* violet pal +20% saturat, transparent */
+    --panel-2:rgba(240,229,252,.62); /* violet f. deschis pt input/drop */
+    --ink:#1D1526;           /* text inchis in casute */
+    --soft:#6A5C7C;          /* text secundar in casute */
+    --light:#F0E9F8;         /* text deschis pe negru */
+    --soft-light:#A99EB8;    /* text secundar pe negru */
+    --line:rgba(150,110,200,.28);
+    --mag:#C81E96; --vio:#7C3AED; --accent:#C81E96; --accent-soft:#F6E6F4;
+    --grad:linear-gradient(135deg,#C81E96 0%,#9D2BC8 55%,#7C3AED 100%);
+    --good:#0FA968; --warn:#D97A12;
     --r:16px; --mono:'JetBrains Mono',monospace; --sans:'Plus Jakarta Sans',system-ui,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
-    -webkit-font-smoothing:antialiased}
+  body{
+    background:
+      radial-gradient(120% 60% at 50% -10%, rgba(200,30,150,.22) 0%, rgba(20,15,28,0) 55%),
+      radial-gradient(120% 60% at 100% 5%, rgba(124,58,237,.20) 0%, rgba(20,15,28,0) 50%),
+      var(--bg);
+    background-attachment:fixed;min-height:100vh;
+    color:var(--light);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased
+  }
   .wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px}
 
   .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.02em}
-  .logo{width:30px;height:30px;border-radius:8px;background:var(--ink);position:relative;flex:none}
-  .logo::before{content:"";position:absolute;inset:7px;border-radius:4px;
-    background:conic-gradient(from 45deg,var(--accent),#9D7BFF,var(--accent))}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.02em;color:var(--light)}
+  .logo{width:30px;height:30px;border-radius:8px;background:var(--grad);position:relative;flex:none}
+  .logo::before{content:"";position:absolute;inset:7px;border-radius:4px;background:rgba(20,15,28,.9)}
   .priv{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
-    color:var(--good);background:#ECFDF5;padding:5px 9px;border-radius:999px;white-space:nowrap}
+    color:var(--mag);background:var(--panel);padding:5px 9px;border-radius:999px;white-space:nowrap}
   .priv b{width:6px;height:6px;border-radius:50%;background:var(--good)}
 
-  h1{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:4px}
-  .sub{color:var(--soft);font-size:14px;margin-bottom:14px}
+  h1{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:4px;
+    background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--soft-light);font-size:14px;margin-bottom:14px}
 
-  .tool{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:14px;box-shadow:0 1px 2px rgba(20,22,29,.04)}
+  .tool{background:var(--panel);color:var(--ink);border:1px solid rgba(255,255,255,.18);
+    border-radius:var(--r);padding:14px;box-shadow:0 18px 40px rgba(0,0,0,.35);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 
   .drop{border:2px dashed var(--line);border-radius:12px;padding:30px 16px;text-align:center;
-    cursor:pointer;transition:.15s;background:#FBFBFE;display:block}
-  .drop.over{border-color:var(--accent);background:var(--accent-soft)}
-  .drop .ic{width:40px;height:40px;margin:0 auto 8px;border-radius:11px;background:var(--accent-soft);
+    cursor:pointer;transition:.15s;background:var(--panel-2);display:block;color:var(--ink)}
+  .drop.over{border-color:var(--mag);background:var(--accent-soft)}
+  .drop .ic{width:40px;height:40px;margin:0 auto 8px;border-radius:11px;background:rgba(255,255,255,.7);
     display:flex;align-items:center;justify-content:center}
-  .drop .ic svg{width:20px;height:20px;stroke:var(--accent)}
-  .drop b{display:block;font-weight:700;font-size:15px}
+  .drop .ic svg{width:20px;height:20px;stroke:var(--mag)}
+  .drop b{display:block;font-weight:700;font-size:15px;color:var(--ink)}
   .drop span{font-size:12.5px;color:var(--soft)}
   .drop input{display:none}
 
@@ -49,50 +65,59 @@
   .f label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;
     letter-spacing:.04em;color:var(--soft);margin-bottom:5px}
   select,input[type=number]{width:100%;font-family:var(--mono);font-size:14px;padding:11px 12px;
-    border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);-webkit-appearance:none}
-  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.62);color:var(--ink);-webkit-appearance:none}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236F6480' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat:no-repeat;background-position:right 12px center}
   .qrow{display:flex;align-items:center;gap:10px}
-  input[type=range]{flex:1;accent-color:var(--accent)}
-  .qv{font-family:var(--mono);font-size:13px;min-width:40px;text-align:right}
+  input[type=range]{flex:1;accent-color:var(--mag)}
+  .qv{font-family:var(--mono);font-size:13px;min-width:40px;text-align:right;color:var(--ink)}
   .f.off{opacity:.4;pointer-events:none}
 
   .acts{display:flex;gap:10px}
   .btn{flex:1;font-family:var(--sans);font-weight:700;font-size:15px;border:none;cursor:pointer;
-    background:var(--accent);color:#fff;padding:13px;border-radius:11px;transition:.1s}
+    background:var(--grad);background-size:160% 160%;background-position:0% 50%;color:#fff;
+    padding:13px;border-radius:11px;transition:background-position .5s ease,transform .1s;
+    box-shadow:0 6px 18px rgba(200,30,150,.3)}
+  .btn:hover{background-position:100% 50%}
   .btn:active{transform:translateY(1px)}
   .btn[disabled]{opacity:.5}
-  .btn.sec{flex:none;width:48px;background:#fff;border:1px solid var(--line);color:var(--soft);font-size:18px}
+  .btn.sec{flex:none;width:48px;background:#fff;border:1px solid var(--line);color:var(--soft);font-size:18px;box-shadow:none}
 
   .res{margin-top:4px}
   .item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-top:1px solid var(--line)}
-  .item img{width:46px;height:46px;border-radius:9px;object-fit:cover;border:1px solid var(--line);flex:none}
+  .item img{width:46px;height:46px;border-radius:9px;object-fit:cover;border:1px solid var(--line);flex:none;background:#fff}
   .info{flex:1;min-width:0}
-  .nm{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .nm{font-weight:600;font-size:13.5px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .st{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-top:2px}
   .st .down{color:var(--good);font-weight:600}
   .st .up{color:var(--warn);font-weight:600}
-  .go{font-weight:700;font-size:12.5px;text-decoration:none;color:#fff;background:var(--accent);
+  .go{font-weight:700;font-size:12.5px;text-decoration:none;color:#fff;background:var(--grad);
     padding:9px 13px;border-radius:9px;white-space:nowrap}
-  .item.wait .go{background:var(--accent-soft);color:var(--accent);pointer-events:none}
+  .item.wait .go{background:var(--accent-soft);color:var(--mag);pointer-events:none}
 
-  .hint{margin-top:10px;font-size:12px;color:#92400E;background:#FFFBEB;border:1px solid #FDE68A;
+  .loading{font-family:var(--mono);font-size:12px;color:var(--mag);padding:8px 4px;display:none}
+  .loading.on{display:block}
+
+  .hint{margin-top:10px;font-size:12px;color:#92400E;background:#FFF6E6;border:1px solid #F4D58A;
     border-radius:9px;padding:9px 11px;display:none}
   .hint.on{display:block}
 
-  .ad{margin:22px 0;min-height:90px;border:1px dashed var(--line);border-radius:12px;
-    display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:11.5px;background:#fff}
-  h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:26px 0 8px}
-  .faq{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .ad{margin:22px 0;min-height:90px;border:1px solid rgba(255,255,255,.18);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);
+    font-size:11.5px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:26px 0 8px;color:var(--light)}
+  .faq{background:var(--panel);color:var(--ink);border:1px solid rgba(255,255,255,.18);
+    border-radius:12px;overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
   details{padding:13px 14px;border-top:1px solid var(--line)}
   details:first-child{border-top:none}
-  summary{font-weight:700;font-size:14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
+  summary{font-weight:700;font-size:14px;color:var(--ink);cursor:pointer;list-style:none;
+    display:flex;justify-content:space-between;gap:12px}
   summary::-webkit-details-marker{display:none}
-  summary::after{content:"+";color:var(--accent);font-weight:700}
+  summary::after{content:"+";color:var(--mag);font-weight:700}
   details[open] summary::after{content:"–"}
-  details p{font-size:13.5px;color:#374151;margin-top:8px}
-  footer{margin-top:30px;text-align:center;color:var(--soft);font-size:12px}
-  footer a{color:var(--soft)}
+  details p{font-size:13.5px;color:#473C55;margin-top:8px}
+  footer{margin-top:30px;text-align:center;color:var(--soft-light);font-size:12px}
+  footer a{color:var(--soft-light)}
 </style>
 </head>
 <body>
@@ -104,23 +129,24 @@
   </div>
 
   <h1>Convertește imagini în browser</h1>
-  <p class="sub">PNG · JPG · WebP — schimbă formatul, comprimă, redimensionează. Fără upload.</p>
+  <p class="sub">HEIC, PNG, JPG → JPG · WebP · AVIF. Schimbă formatul, comprimă, redimensionează. Fără upload.</p>
 
   <div class="tool">
     <label class="drop" id="drop">
-      <input type="file" id="file" accept="image/*" multiple>
+      <input type="file" id="file" accept="image/*,.heic,.heif" multiple>
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M5 11l7-7 7 7"/><path d="M4 20h16"/></svg></span>
       <b>Atinge sau trage imaginile aici</b>
-      <span>PNG, JPG, WebP, GIF · mai multe deodată</span>
+      <span>HEIC, PNG, JPG, WebP, GIF, BMP · mai multe deodată</span>
     </label>
 
     <div class="ctrl" id="ctrl">
       <div class="grid">
         <div class="f">
-          <label for="fmt">Format</label>
+          <label for="fmt">Format ieșire</label>
           <select id="fmt">
             <option value="image/jpeg">JPG</option>
             <option value="image/webp">WebP</option>
+            <option value="image/avif">AVIF</option>
             <option value="image/png">PNG</option>
           </select>
         </div>
@@ -140,6 +166,7 @@
       </div>
     </div>
 
+    <div class="loading" id="loading">Se citește HEIC… poate dura câteva secunde.</div>
     <div class="res" id="res"></div>
   </div>
 
@@ -147,14 +174,14 @@
 
   <h2>Întrebări frecvente</h2>
   <div class="faq">
-    <details open><summary>Imaginile se încarcă pe un server?</summary>
-      <p>Nu. Conversia se face local, în browserul tău. Nimic nu se urcă pe internet, deci fișierele rămân private.</p></details>
-    <details><summary>JPG, PNG sau WebP — ce aleg?</summary>
-      <p>JPG pentru fotografii (fișiere mici). PNG pentru logo-uri și transparență. WebP e modern și recomandat pentru web — calitate bună la dimensiune mică.</p></details>
+    <details open><summary>Cum convertesc HEIC în JPG?</summary>
+      <p>Adaugă pozele .heic de pe iPhone, alege „JPG" la format și apasă Convertește. Decodarea se face local, în browser — pozele nu se urcă nicăieri.</p></details>
+    <details><summary>Imaginile se încarcă pe un server?</summary>
+      <p>Nu. Toată conversia, inclusiv HEIC, se face în browserul tău. Nimic nu pleacă de pe device.</p></details>
+    <details><summary>JPG, WebP sau AVIF — ce aleg?</summary>
+      <p>JPG pentru compatibilitate maximă. WebP pentru web, fișiere mici. AVIF e cel mai eficient (fișiere și mai mici), dar nu e suportat de browserele foarte vechi.</p></details>
     <details><summary>De ce uneori fișierul devine mai mare?</summary>
-      <p>Dacă transformi o fotografie JPG în PNG, fișierul crește, fiindcă PNG nu comprimă fotografiile la fel de eficient. Pentru poze mai mici, alege JPG sau WebP.</p></details>
-    <details><summary>Există limită de mărime sau număr?</summary>
-      <p>Nu. Singura limită e memoria device-ului tău, fiindcă totul se procesează local.</p></details>
+      <p>Dacă transformi o fotografie în PNG, fișierul crește, fiindcă PNG nu comprimă fotografiile eficient. Pentru poze mai mici, alege JPG, WebP sau AVIF.</p></details>
   </div>
 
   <footer>PixelSwap · convertor gratuit, procesat local · <a href="#">Confidențialitate</a></footer>
@@ -163,11 +190,13 @@
 <script>
 const $=s=>document.querySelector(s);
 const drop=$('#drop'),file=$('#file'),ctrl=$('#ctrl'),res=$('#res'),fmt=$('#fmt'),
-      q=$('#q'),qv=$('#qv'),qf=$('#qf'),mw=$('#mw'),go=$('#go'),clr=$('#clr'),hint=$('#hint');
+      q=$('#q'),qv=$('#qv'),qf=$('#qf'),mw=$('#mw'),go=$('#go'),clr=$('#clr'),
+      hint=$('#hint'),loading=$('#loading');
 let items=[];
 
 const bytes=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(2)+' MB';
-const ext=m=>m==='image/jpeg'?'jpg':m==='image/webp'?'webp':'png';
+const ext=m=>({'image/jpeg':'jpg','image/webp':'webp','image/avif':'avif','image/png':'png'}[m]||'png');
+const isHeic=f=>/\.(heic|heif)$/i.test(f.name)||f.type==='image/heic'||f.type==='image/heif';
 
 ['dragenter','dragover'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.add('over')}));
 ['dragleave','drop'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.remove('over')}));
@@ -175,18 +204,34 @@ drop.addEventListener('drop',v=>add(v.dataTransfer.files));
 file.addEventListener('change',v=>add(v.target.files));
 q.addEventListener('input',()=>qv.textContent=q.value+'%');
 fmt.addEventListener('change',()=>{
-  qf.classList.toggle('off',fmt.value==='image/png');
-  hint.classList.toggle('on',fmt.value==='image/png');
-  if(fmt.value==='image/png') hint.textContent='PNG poate mări fotografiile. Pentru fișiere mici, alege JPG sau WebP.';
+  const png=fmt.value==='image/png';
+  qf.classList.toggle('off',png);
+  hint.classList.toggle('on',png);
+  if(png) hint.textContent='PNG poate mări fotografiile. Pentru fișiere mici, alege JPG, WebP sau AVIF.';
 });
 
-function add(list){
-  [...list].filter(f=>f.type.startsWith('image/')).forEach(f=>{
-    const url=URL.createObjectURL(f), im=new Image();
-    im.onload=()=>{items.push({file:f,url,name:f.name,size:f.size,w:im.width,h:im.height});paint()};
-    im.src=url;
-  });
+async function add(list){
   ctrl.classList.add('on');
+  for(const f of [...list]){
+    const heic=isHeic(f);
+    if(!f.type.startsWith('image/') && !heic) continue;
+    let srcBlob=f;
+    if(heic){
+      if(typeof heic2any!=='function'){ alert('Suportul HEIC nu s-a încărcat (verifică internetul).'); continue; }
+      loading.classList.add('on');
+      try{
+        const out=await heic2any({blob:f,toType:'image/png'});
+        srcBlob=Array.isArray(out)?out[0]:out;
+      }catch(e){ loading.classList.remove('on'); alert('Nu am putut citi: '+f.name); continue; }
+      loading.classList.remove('on');
+    }
+    await new Promise(done=>{
+      const url=URL.createObjectURL(srcBlob), im=new Image();
+      im.onload=()=>{items.push({url,name:f.name,size:f.size,w:im.width,h:im.height});paint();done()};
+      im.onerror=()=>done();
+      im.src=url;
+    });
+  }
 }
 function paint(){
   res.innerHTML=items.map((it,i)=>`<div class="item wait" data-i="${i}">
@@ -204,19 +249,25 @@ function conv(it){return new Promise(r=>{
     const x=c.getContext('2d');
     if(fmt.value==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,w,h)}
     x.drawImage(im,0,0,w,h);
-    c.toBlob(b=>r({b,w,h}),fmt.value,q.value/100);
+    c.toBlob(b=>{
+      if(b){r({b,w,h});return}
+      c.toBlob(b2=>r({b:b2,w,h,fallback:true}),'image/webp',q.value/100);
+    },fmt.value,q.value/100);
   };im.src=it.url;
 })}
 go.addEventListener('click',async()=>{
   go.disabled=true;go.textContent='Se procesează…';
   const rows=[...res.children];
   for(let i=0;i<items.length;i++){
-    const it=items[i],row=rows[i],{b,w,h}=await conv(it);
-    const u=URL.createObjectURL(b),out=it.name.replace(/\.[^.]+$/,'')+'.'+ext(fmt.value);
+    const it=items[i],row=rows[i],{b,w,h,fallback}=await conv(it);
+    const realFmt=fallback?'image/webp':fmt.value;
+    const u=URL.createObjectURL(b),out=it.name.replace(/\.[^.]+$/,'')+'.'+ext(realFmt);
     const d=it.size-b.size,p=Math.round(Math.abs(d)/it.size*100);
     const cls=d>=0?'down':'up',sgn=d>=0?'−':'+';
     row.classList.remove('wait');
-    row.querySelector('.st').innerHTML=`${w}×${h} · <span class="${cls}">${sgn}${p}%</span> · ${bytes(b.size)}`;
+    row.querySelector('.st').innerHTML=
+      `${w}×${h} · <span class="${cls}">${sgn}${p}%</span> · ${bytes(b.size)}`+
+      (fallback?' · <span class="up">AVIF nesuportat → WebP</span>':'');
     const a=row.querySelector('.go');a.href=u;a.download=out;
   }
   go.disabled=false;go.textContent='Convertește';
