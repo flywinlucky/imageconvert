@@ -3,331 +3,227 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convertor Imagini Online Gratuit — PNG, JPG, WebP în browser</title>
-<meta name="description" content="Convertește imagini PNG, JPG și WebP gratuit, direct în browser. Redimensionează și comprimă fără să încarci fișierele pe niciun server. Privat, rapid, fără limită.">
-<link rel="canonical" href="https://EXEMPLU.github.io/">
-<!-- Open Graph pentru share pe social -->
-<meta property="og:title" content="Convertor Imagini Online Gratuit — PNG, JPG, WebP">
-<meta property="og:description" content="Convertește și comprimă imagini direct în browser. Nimic nu se încarcă pe server.">
-<meta property="og:type" content="website">
-
-<!-- ===================================================================
-     GOOGLE ADSENSE — pasul 1: lipește aici scriptul tău după aprobare
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX" crossorigin="anonymous"></script>
-=================================================================== -->
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
-
+<title>Convertor Imagini — PNG, JPG, WebP în browser</title>
+<meta name="description" content="Convertește și comprimă imagini PNG, JPG, WebP gratuit, direct în browser. Fără upload, fără cont. Privat și rapid.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#EEF0F4;
-    --surface:#FFFFFF;
-    --ink:#171A21;
-    --ink-soft:#5A6173;
-    --line:#D7DBE3;
-    --accent:#2B4DFF;       /* cobalt — acțiunea principală */
-    --accent-2:#FF5A2B;     /* coral — economia de spațiu / accent */
-    --good:#0E9F6E;
-    --radius:14px;
-    --mono:'JetBrains Mono',ui-monospace,monospace;
-    --disp:'Space Grotesk',system-ui,sans-serif;
-    --body:'Inter',system-ui,sans-serif;
+    --bg:#F6F7FB; --card:#FFFFFF; --ink:#14161D; --soft:#6B7280;
+    --line:#E6E8EF; --accent:#5B5BD6; --accent-soft:#EEEEFB;
+    --good:#10B981; --warn:#F59E0B;
+    --r:16px; --mono:'JetBrains Mono',monospace; --sans:'Plus Jakarta Sans',system-ui,sans-serif;
   }
-  *{box-sizing:border-box}
-  body{
-    margin:0;background:var(--bg);color:var(--ink);
-    font-family:var(--body);line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:920px;margin:0 auto;padding:0 20px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:560px;margin:0 auto;padding:18px 16px 60px}
 
-  /* ---- Header ---- */
-  header{padding:30px 0 8px}
-  .brand{display:flex;align-items:center;gap:12px;font-family:var(--disp);font-weight:700;font-size:19px;letter-spacing:-.02em}
-  .logo{width:34px;height:34px;border-radius:9px;background:var(--ink);position:relative;flex:none}
-  .logo::before,.logo::after{content:"";position:absolute;border-radius:3px}
-  .logo::before{inset:8px auto 8px 8px;width:8px;height:18px;background:var(--accent)}
-  .logo::after{inset:8px 8px auto auto;width:8px;height:18px;background:var(--accent-2)}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;letter-spacing:-.02em}
+  .logo{width:30px;height:30px;border-radius:8px;background:var(--ink);position:relative;flex:none}
+  .logo::before{content:"";position:absolute;inset:7px;border-radius:4px;
+    background:conic-gradient(from 45deg,var(--accent),#9D7BFF,var(--accent))}
+  .priv{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+    color:var(--good);background:#ECFDF5;padding:5px 9px;border-radius:999px;white-space:nowrap}
+  .priv b{width:6px;height:6px;border-radius:50%;background:var(--good)}
 
-  /* ---- Hero ---- */
-  .hero{padding:34px 0 22px}
-  h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,5.5vw,46px);line-height:1.05;letter-spacing:-.03em;margin:0 0 14px}
-  h1 .hl{color:var(--accent)}
-  .lede{font-size:18px;color:var(--ink-soft);max-width:620px;margin:0}
-  .privacy-pill{display:inline-flex;align-items:center;gap:8px;margin-top:18px;background:var(--surface);border:1px solid var(--line);
-    padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;font-family:var(--mono)}
-  .dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 0 4px rgba(14,159,110,.18)}
+  h1{font-size:22px;font-weight:800;letter-spacing:-.03em;line-height:1.2;margin-bottom:4px}
+  .sub{color:var(--soft);font-size:14px;margin-bottom:14px}
 
-  /* ---- Tool ---- */
-  .tool{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:8px;margin-top:24px}
-  .drop{
-    border:2px dashed var(--line);border-radius:11px;padding:46px 24px;text-align:center;
-    cursor:pointer;transition:border-color .15s,background .15s;background:#FBFCFE;
-  }
-  .drop:hover,.drop.over{border-color:var(--accent);background:#F3F6FF}
-  .drop .big{font-family:var(--disp);font-weight:600;font-size:20px;margin:6px 0 4px}
-  .drop .sub{color:var(--ink-soft);font-size:14px}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:14px;box-shadow:0 1px 2px rgba(20,22,29,.04)}
+
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:30px 16px;text-align:center;
+    cursor:pointer;transition:.15s;background:#FBFBFE;display:block}
+  .drop.over{border-color:var(--accent);background:var(--accent-soft)}
+  .drop .ic{width:40px;height:40px;margin:0 auto 8px;border-radius:11px;background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center}
+  .drop .ic svg{width:20px;height:20px;stroke:var(--accent)}
+  .drop b{display:block;font-weight:700;font-size:15px}
+  .drop span{font-size:12.5px;color:var(--soft)}
   .drop input{display:none}
 
-  /* ---- Controls ---- */
-  .controls{display:none;gap:18px;flex-wrap:wrap;align-items:flex-end;padding:18px 14px 6px}
-  .controls.show{display:flex}
-  .field{display:flex;flex-direction:column;gap:6px}
-  .field label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
-  select,input[type=number]{
-    font-family:var(--mono);font-size:14px;padding:10px 12px;border:1px solid var(--line);
-    border-radius:9px;background:var(--surface);color:var(--ink);min-width:120px;
-  }
-  .range-wrap{display:flex;align-items:center;gap:10px}
-  input[type=range]{accent-color:var(--accent);width:140px}
-  .qval{font-family:var(--mono);font-size:14px;min-width:42px}
-  .btn{
-    font-family:var(--disp);font-weight:600;font-size:15px;border:none;cursor:pointer;
-    background:var(--accent);color:#fff;padding:12px 22px;border-radius:10px;transition:transform .08s,filter .15s;
-  }
-  .btn:hover{filter:brightness(1.06)}
+  .ctrl{display:none;margin-top:14px;gap:12px;flex-direction:column}
+  .ctrl.on{display:flex}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .f label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.04em;color:var(--soft);margin-bottom:5px}
+  select,input[type=number]{width:100%;font-family:var(--mono);font-size:14px;padding:11px 12px;
+    border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);-webkit-appearance:none}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center}
+  .qrow{display:flex;align-items:center;gap:10px}
+  input[type=range]{flex:1;accent-color:var(--accent)}
+  .qv{font-family:var(--mono);font-size:13px;min-width:40px;text-align:right}
+  .f.off{opacity:.4;pointer-events:none}
+
+  .acts{display:flex;gap:10px}
+  .btn{flex:1;font-family:var(--sans);font-weight:700;font-size:15px;border:none;cursor:pointer;
+    background:var(--accent);color:#fff;padding:13px;border-radius:11px;transition:.1s}
   .btn:active{transform:translateY(1px)}
-  .btn[disabled]{opacity:.45;cursor:not-allowed}
-  .btn-ghost{background:transparent;color:var(--ink-soft);padding:12px 14px}
+  .btn[disabled]{opacity:.5}
+  .btn.sec{flex:none;width:48px;background:#fff;border:1px solid var(--line);color:var(--soft);font-size:18px}
 
-  /* ---- Results ---- */
-  .results{padding:6px 8px 10px}
-  .row{display:flex;align-items:center;gap:14px;padding:12px;border-top:1px solid var(--line)}
-  .row:first-child{border-top:none}
-  .thumb{width:54px;height:54px;border-radius:8px;object-fit:cover;background:var(--bg);flex:none;border:1px solid var(--line)}
-  .meta{flex:1;min-width:0}
-  .fname{font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .stats{font-family:var(--mono);font-size:12px;color:var(--ink-soft);margin-top:2px}
-  .save{color:var(--accent-2);font-weight:600}
-  .save.grow{color:var(--ink-soft)}
-  .dl{font-family:var(--disp);font-weight:600;font-size:13px;text-decoration:none;color:var(--accent);
-    border:1px solid var(--accent);padding:8px 14px;border-radius:8px;white-space:nowrap}
-  .dl:hover{background:var(--accent);color:#fff}
-  .row.pending .dl{pointer-events:none;opacity:.4}
+  .res{margin-top:4px}
+  .item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-top:1px solid var(--line)}
+  .item img{width:46px;height:46px;border-radius:9px;object-fit:cover;border:1px solid var(--line);flex:none}
+  .info{flex:1;min-width:0}
+  .nm{font-weight:600;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .st{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-top:2px}
+  .st .down{color:var(--good);font-weight:600}
+  .st .up{color:var(--warn);font-weight:600}
+  .go{font-weight:700;font-size:12.5px;text-decoration:none;color:#fff;background:var(--accent);
+    padding:9px 13px;border-radius:9px;white-space:nowrap}
+  .item.wait .go{background:var(--accent-soft);color:var(--accent);pointer-events:none}
 
-  /* ---- Ad slots ---- */
-  .ad{margin:30px 0;min-height:90px;border:1px dashed var(--line);border-radius:10px;
-    display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
-    font-family:var(--mono);font-size:12px;background:repeating-linear-gradient(45deg,#fff,#fff 10px,#fafbfd 10px,#fafbfd 20px)}
+  .hint{margin-top:10px;font-size:12px;color:#92400E;background:#FFFBEB;border:1px solid #FDE68A;
+    border-radius:9px;padding:9px 11px;display:none}
+  .hint.on{display:block}
 
-  /* ---- Content (SEO + AdSense) ---- */
-  section.content{margin:18px 0}
-  h2{font-family:var(--disp);font-weight:700;font-size:26px;letter-spacing:-.02em;margin:36px 0 12px}
-  h3{font-family:var(--disp);font-weight:600;font-size:18px;margin:22px 0 6px}
-  .content p{color:#2A2F3A;max-width:680px}
-  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
-  .step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px}
-  .step .n{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:600}
-  .step .t{font-family:var(--disp);font-weight:600;margin:6px 0 4px}
-  .step p{font-size:14px;color:var(--ink-soft);margin:0}
-  details{border-top:1px solid var(--line);padding:14px 0}
-  summary{font-family:var(--disp);font-weight:600;cursor:pointer;font-size:16px;list-style:none}
+  .ad{margin:22px 0;min-height:90px;border:1px dashed var(--line);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;color:var(--soft);font-family:var(--mono);font-size:11.5px;background:#fff}
+  h2{font-size:18px;font-weight:800;letter-spacing:-.02em;margin:26px 0 8px}
+  .faq{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  details{padding:13px 14px;border-top:1px solid var(--line)}
+  details:first-child{border-top:none}
+  summary{font-weight:700;font-size:14px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px}
   summary::-webkit-details-marker{display:none}
-  summary::before{content:"+ ";color:var(--accent);font-family:var(--mono)}
-  details[open] summary::before{content:"– "}
-  details p{margin:10px 0 0;font-size:15px}
-
-  footer{border-top:1px solid var(--line);margin-top:40px;padding:24px 0 50px;color:var(--ink-soft);font-size:13px}
-  footer a{color:var(--ink-soft)}
-
-  @media (max-width:560px){
-    .row{flex-wrap:wrap}
-    .dl{width:100%;text-align:center}
-  }
+  summary::after{content:"+";color:var(--accent);font-weight:700}
+  details[open] summary::after{content:"–"}
+  details p{font-size:13.5px;color:#374151;margin-top:8px}
+  footer{margin-top:30px;text-align:center;color:var(--soft);font-size:12px}
+  footer a{color:var(--soft)}
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<header><div class="wrap"><div class="brand"><span class="logo"></span>PixelSwap</div></div></header>
-
-<main class="wrap">
-
-  <div class="hero">
-    <h1>Convertește imagini <span class="hl">direct în browser</span></h1>
-    <p class="lede">PNG, JPG și WebP — schimbă formatul, redimensionează și comprimă într-o secundă. Fără cont, fără limită, fără upload.</p>
-    <div class="privacy-pill"><span class="dot"></span>Fișierele nu părăsesc device-ul tău</div>
+  <div class="top">
+    <div class="brand"><span class="logo"></span>PixelSwap</div>
+    <span class="priv"><b></b>Procesat local pe device</span>
   </div>
 
-  <!-- ============ UNEALTA ============ -->
+  <h1>Convertește imagini în browser</h1>
+  <p class="sub">PNG · JPG · WebP — schimbă formatul, comprimă, redimensionează. Fără upload.</p>
+
   <div class="tool">
     <label class="drop" id="drop">
       <input type="file" id="file" accept="image/*" multiple>
-      <div class="big">Trage imaginile aici</div>
-      <div class="sub">sau apasă ca să alegi din device · PNG, JPG, WebP, GIF, BMP</div>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M5 11l7-7 7 7"/><path d="M4 20h16"/></svg></span>
+      <b>Atinge sau trage imaginile aici</b>
+      <span>PNG, JPG, WebP, GIF · mai multe deodată</span>
     </label>
 
-    <div class="controls" id="controls">
-      <div class="field">
-        <label for="fmt">Format ieșire</label>
-        <select id="fmt">
-          <option value="image/jpeg">JPG</option>
-          <option value="image/png">PNG</option>
-          <option value="image/webp">WebP</option>
-        </select>
-      </div>
-      <div class="field" id="qfield">
-        <label for="quality">Calitate</label>
-        <div class="range-wrap">
-          <input type="range" id="quality" min="10" max="100" value="82">
-          <span class="qval" id="qval">82%</span>
+    <div class="ctrl" id="ctrl">
+      <div class="grid">
+        <div class="f">
+          <label for="fmt">Format</label>
+          <select id="fmt">
+            <option value="image/jpeg">JPG</option>
+            <option value="image/webp">WebP</option>
+            <option value="image/png">PNG</option>
+          </select>
+        </div>
+        <div class="f" id="qf">
+          <label for="q">Calitate · <span id="qv">82%</span></label>
+          <div class="qrow"><input type="range" id="q" min="10" max="100" value="82"></div>
         </div>
       </div>
-      <div class="field">
-        <label for="maxw">Lățime max (px)</label>
-        <input type="number" id="maxw" placeholder="auto" min="16" step="10">
+      <div class="f">
+        <label for="mw">Lățime maximă (px) — opțional</label>
+        <input type="number" id="mw" placeholder="păstrează originalul" min="16" step="10">
       </div>
-      <button class="btn" id="convert">Convertește</button>
-      <button class="btn btn-ghost" id="clear">Golește</button>
+      <div class="hint" id="hint"></div>
+      <div class="acts">
+        <button class="btn" id="go">Convertește</button>
+        <button class="btn sec" id="clr" title="Golește">✕</button>
+      </div>
     </div>
 
-    <div class="results" id="results"></div>
+    <div class="res" id="res"></div>
   </div>
 
-  <!-- ============ AD SLOT 1 ============ -->
-  <!-- Înlocuiește acest div cu unitatea ta AdSense după aprobare -->
-  <div class="ad" id="ad-1">spațiu reclamă · 728×90 / responsive</div>
+  <div class="ad">spațiu reclamă · responsive</div>
 
-  <!-- ============ CONȚINUT (necesar pentru AdSense + SEO) ============ -->
-  <section class="content">
-    <h2>Cum funcționează convertorul</h2>
-    <p>Spre deosebire de majoritatea convertoarelor online, aici imaginile <strong>nu se trimit pe niciun server</strong>. Conversia se face local, în browserul tău, folosind tehnologia Canvas. Asta înseamnă că e instant, merge și offline după prima încărcare a paginii, și fișierele tale rămân private.</p>
+  <h2>Întrebări frecvente</h2>
+  <div class="faq">
+    <details open><summary>Imaginile se încarcă pe un server?</summary>
+      <p>Nu. Conversia se face local, în browserul tău. Nimic nu se urcă pe internet, deci fișierele rămân private.</p></details>
+    <details><summary>JPG, PNG sau WebP — ce aleg?</summary>
+      <p>JPG pentru fotografii (fișiere mici). PNG pentru logo-uri și transparență. WebP e modern și recomandat pentru web — calitate bună la dimensiune mică.</p></details>
+    <details><summary>De ce uneori fișierul devine mai mare?</summary>
+      <p>Dacă transformi o fotografie JPG în PNG, fișierul crește, fiindcă PNG nu comprimă fotografiile la fel de eficient. Pentru poze mai mici, alege JPG sau WebP.</p></details>
+    <details><summary>Există limită de mărime sau număr?</summary>
+      <p>Nu. Singura limită e memoria device-ului tău, fiindcă totul se procesează local.</p></details>
+  </div>
 
-    <div class="steps">
-      <div class="step"><div class="n">01</div><div class="t">Adaugă imaginile</div><p>Trage fișierele în casetă sau alege-le din device. Poți încărca mai multe deodată.</p></div>
-      <div class="step"><div class="n">02</div><div class="t">Alege setările</div><p>Selectează formatul, calitatea de compresie și, opțional, o lățime maximă pentru redimensionare.</p></div>
-      <div class="step"><div class="n">03</div><div class="t">Descarcă</div><p>Apasă „Convertește” și descarcă fiecare imagine. Vezi imediat cât spațiu ai economisit.</p></div>
-    </div>
-
-    <h2>Întrebări frecvente</h2>
-
-    <details open><summary>Imaginile mele sunt încărcate pe un server?</summary>
-      <p>Nu. Întreaga conversie se petrece în browserul tău, pe propriul device. Nimic nu se urcă pe internet, deci poți procesa și fotografii personale sau documente fără griji de confidențialitate.</p></details>
-
-    <details><summary>Care e diferența între JPG, PNG și WebP?</summary>
-      <p>JPG e ideal pentru fotografii și are fișiere mici, dar nu păstrează transparența. PNG păstrează transparența și e bun pentru logo-uri și grafică, dar fișierele sunt mai mari. WebP e formatul modern care combină ambele avantaje — calitate bună la dimensiune mică — și e recomandat pentru site-uri web.</p></details>
-
-    <details><summary>Ce înseamnă slider-ul de calitate?</summary>
-      <p>Pentru JPG și WebP, calitatea controlează cât de mult se comprimă imaginea. O valoare în jur de 80% oferă de obicei cel mai bun echilibru: fișier mic, dar fără pierderi vizibile. PNG e fără pierderi, așa că slider-ul nu se aplică acolo.</p></details>
-
-    <details><summary>Există o limită de mărime sau de număr de fișiere?</summary>
-      <p>Nu impunem nicio limită. Singura constrângere e memoria device-ului tău, fiindcă procesarea se face local. Pe imagini foarte mari și multe deodată, telefoanele mai vechi pot lucra mai lent.</p></details>
-
-    <details><summary>De ce să convertesc PNG în JPG sau WebP?</summary>
-      <p>Pentru a reduce dimensiunea fișierului. Un PNG de fotografie poate fi de câteva ori mai mare decât același JPG. Convertirea în WebP poate reduce și mai mult mărimea, util pentru încărcarea rapidă a site-urilor și economisirea spațiului.</p></details>
-  </section>
-
-  <!-- ============ AD SLOT 2 ============ -->
-  <div class="ad" id="ad-2">spațiu reclamă · in-article / responsive</div>
-
-</main>
-
-<footer><div class="wrap">
-  PixelSwap · convertor de imagini gratuit, procesat local în browser ·
-  <a href="#">Politica de confidențialitate</a> · <a href="#">Contact</a>
-</div></footer>
+  <footer>PixelSwap · convertor gratuit, procesat local · <a href="#">Confidențialitate</a></footer>
+</div>
 
 <script>
-const $ = s => document.querySelector(s);
-const drop=$('#drop'), fileInput=$('#file'), controls=$('#controls'),
-      results=$('#results'), fmt=$('#fmt'), quality=$('#quality'),
-      qval=$('#qval'), qfield=$('#qfield'), maxw=$('#maxw'),
-      convertBtn=$('#convert'), clearBtn=$('#clear');
+const $=s=>document.querySelector(s);
+const drop=$('#drop'),file=$('#file'),ctrl=$('#ctrl'),res=$('#res'),fmt=$('#fmt'),
+      q=$('#q'),qv=$('#qv'),qf=$('#qf'),mw=$('#mw'),go=$('#go'),clr=$('#clr'),hint=$('#hint');
+let items=[];
 
-let items = []; // {file, url, name, origSize, w, h}
+const bytes=b=>b<1024?b+' B':b<1048576?(b/1024).toFixed(1)+' KB':(b/1048576).toFixed(2)+' MB';
+const ext=m=>m==='image/jpeg'?'jpg':m==='image/webp'?'webp':'png';
 
-function fmtBytes(b){
-  if(b<1024) return b+' B';
-  if(b<1048576) return (b/1024).toFixed(1)+' KB';
-  return (b/1048576).toFixed(2)+' MB';
-}
-function extFor(mime){ return mime==='image/jpeg'?'jpg':mime==='image/webp'?'webp':'png'; }
-
-// drag & drop
-['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over')}));
-['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over')}));
-drop.addEventListener('drop',ev=>handleFiles(ev.dataTransfer.files));
-fileInput.addEventListener('change',ev=>handleFiles(ev.target.files));
-
-quality.addEventListener('input',()=>qval.textContent=quality.value+'%');
-fmt.addEventListener('change',()=>{ qfield.style.opacity = fmt.value==='image/png'?'.4':'1'; });
-
-function handleFiles(list){
-  [...list].filter(f=>f.type.startsWith('image/')).forEach(f=>{
-    const url=URL.createObjectURL(f);
-    const img=new Image();
-    img.onload=()=>{
-      items.push({file:f,url,name:f.name,origSize:f.size,w:img.width,h:img.height});
-      render();
-    };
-    img.src=url;
-  });
-  controls.classList.add('show');
-}
-
-function render(){
-  results.innerHTML='';
-  items.forEach((it,i)=>{
-    const row=document.createElement('div');
-    row.className='row pending';
-    row.dataset.i=i;
-    row.innerHTML=`
-      <img class="thumb" src="${it.url}" alt="">
-      <div class="meta">
-        <div class="fname">${it.name}</div>
-        <div class="stats">${it.w}×${it.h}px · ${fmtBytes(it.origSize)}</div>
-      </div>
-      <span class="dl">Descarcă</span>`;
-    results.appendChild(row);
-  });
-}
-
-async function convertOne(it){
-  return new Promise(resolve=>{
-    const img=new Image();
-    img.onload=()=>{
-      let{width:w,height:h}=img;
-      const cap=parseInt(maxw.value);
-      if(cap && w>cap){ h=Math.round(h*cap/w); w=cap; }
-      const c=document.createElement('canvas');
-      c.width=w; c.height=h;
-      const ctx=c.getContext('2d');
-      if(fmt.value==='image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h); } // fundal alb pt JPG
-      ctx.drawImage(img,0,0,w,h);
-      c.toBlob(blob=>resolve({blob,w,h}), fmt.value, quality.value/100);
-    };
-    img.src=it.url;
-  });
-}
-
-convertBtn.addEventListener('click',async()=>{
-  convertBtn.disabled=true; convertBtn.textContent='Se procesează…';
-  const rows=[...results.children];
-  for(let i=0;i<items.length;i++){
-    const it=items[i], row=rows[i];
-    const {blob,w,h}=await convertOne(it);
-    const outUrl=URL.createObjectURL(blob);
-    const outName=it.name.replace(/\.[^.]+$/,'')+'.'+extFor(fmt.value);
-    const diff=it.origSize-blob.size;
-    const pct=Math.round(Math.abs(diff)/it.origSize*100);
-    const saveTxt = diff>=0 ? `−${pct}% (${fmtBytes(it.origSize)} → ${fmtBytes(blob.size)})`
-                            : `+${pct}% (${fmtBytes(it.origSize)} → ${fmtBytes(blob.size)})`;
-    row.classList.remove('pending');
-    row.querySelector('.stats').innerHTML=
-      `${w}×${h}px · <span class="save ${diff<0?'grow':''}">${saveTxt}</span>`;
-    const dl=row.querySelector('.dl');
-    dl.setAttribute('href',outUrl);
-    dl.setAttribute('download',outName);
-    dl.outerHTML=`<a class="dl" href="${outUrl}" download="${outName}">Descarcă</a>`;
-  }
-  convertBtn.disabled=false; convertBtn.textContent='Convertește';
+['dragenter','dragover'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,v=>{v.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',v=>add(v.dataTransfer.files));
+file.addEventListener('change',v=>add(v.target.files));
+q.addEventListener('input',()=>qv.textContent=q.value+'%');
+fmt.addEventListener('change',()=>{
+  qf.classList.toggle('off',fmt.value==='image/png');
+  hint.classList.toggle('on',fmt.value==='image/png');
+  if(fmt.value==='image/png') hint.textContent='PNG poate mări fotografiile. Pentru fișiere mici, alege JPG sau WebP.';
 });
 
-clearBtn.addEventListener('click',()=>{
+function add(list){
+  [...list].filter(f=>f.type.startsWith('image/')).forEach(f=>{
+    const url=URL.createObjectURL(f), im=new Image();
+    im.onload=()=>{items.push({file:f,url,name:f.name,size:f.size,w:im.width,h:im.height});paint()};
+    im.src=url;
+  });
+  ctrl.classList.add('on');
+}
+function paint(){
+  res.innerHTML=items.map((it,i)=>`<div class="item wait" data-i="${i}">
+    <img src="${it.url}" alt="">
+    <div class="info"><div class="nm">${it.name}</div>
+    <div class="st">${it.w}×${it.h} · ${bytes(it.size)}</div></div>
+    <a class="go">Descarcă</a></div>`).join('');
+}
+function conv(it){return new Promise(r=>{
+  const im=new Image();
+  im.onload=()=>{
+    let w=im.width,h=im.height,cap=parseInt(mw.value);
+    if(cap&&w>cap){h=Math.round(h*cap/w);w=cap}
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const x=c.getContext('2d');
+    if(fmt.value==='image/jpeg'){x.fillStyle='#fff';x.fillRect(0,0,w,h)}
+    x.drawImage(im,0,0,w,h);
+    c.toBlob(b=>r({b,w,h}),fmt.value,q.value/100);
+  };im.src=it.url;
+})}
+go.addEventListener('click',async()=>{
+  go.disabled=true;go.textContent='Se procesează…';
+  const rows=[...res.children];
+  for(let i=0;i<items.length;i++){
+    const it=items[i],row=rows[i],{b,w,h}=await conv(it);
+    const u=URL.createObjectURL(b),out=it.name.replace(/\.[^.]+$/,'')+'.'+ext(fmt.value);
+    const d=it.size-b.size,p=Math.round(Math.abs(d)/it.size*100);
+    const cls=d>=0?'down':'up',sgn=d>=0?'−':'+';
+    row.classList.remove('wait');
+    row.querySelector('.st').innerHTML=`${w}×${h} · <span class="${cls}">${sgn}${p}%</span> · ${bytes(b.size)}`;
+    const a=row.querySelector('.go');a.href=u;a.download=out;
+  }
+  go.disabled=false;go.textContent='Convertește';
+});
+clr.addEventListener('click',()=>{
   items.forEach(it=>URL.revokeObjectURL(it.url));
-  items=[]; results.innerHTML=''; controls.classList.remove('show');
-  fileInput.value='';
+  items=[];res.innerHTML='';ctrl.classList.remove('on');file.value='';
 });
 </script>
 </body>
